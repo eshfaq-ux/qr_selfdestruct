@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: qr-selfdestruct
+    runtime: node
+    buildCommand: npm install
+    startCommand: node app.js
+    envVars:
+      - key: BASE_URL
+        sync: false
