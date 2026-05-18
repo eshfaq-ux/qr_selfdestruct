@@ -149,7 +149,7 @@ app.get("/s/:token", (req, res) => {
     <div class="trust-bar">
       <span>🔒 SSL Secured</span>
       <span><img src="${UPI_LOGO}" alt="UPI" style="height:22px;vertical-align:middle;object-fit:contain"></span>
-      <span><img src="${NPCI_LOGO}" alt="NPCI" style="height:32px;vertical-align:middle;object-fit:contain"></span>
+      <span><img src="${NPCI_LOGO}" alt="NPCI" style="height:38px;vertical-align:middle;object-fit:contain;mix-blend-mode:multiply"></span>
     </div>
 
     <div class="content">
