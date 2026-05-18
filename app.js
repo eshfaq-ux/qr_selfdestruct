@@ -1,8 +1,10 @@
 const express = require("express");
 const QRCode = require("qrcode");
 const { randomBytes } = require("crypto");
+const path = require("path");
 
 const app = express();
+app.use("/img", express.static(path.join(__dirname)));
 const links = {};
 
 // Permanent link for main UPI ID
@@ -111,7 +113,7 @@ app.get("/s/:token", (req, res) => {
 
     /* Trust bar */
     .trust-bar{display:flex;justify-content:center;gap:0;background:#f0f4ff;border-bottom:1px solid #e0e8ff}
-    .trust-bar span{flex:1;text-align:center;padding:9px 4px;font-size:11px;color:#3b5bdb;font-weight:600;border-right:1px solid #e0e8ff}
+    .trust-bar span{flex:1;text-align:center;padding:8px 4px;font-size:11px;color:#3b5bdb;font-weight:600;border-right:1px solid #e0e8ff;display:flex;align-items:center;justify-content:center}
     .trust-bar span:last-child{border-right:none}
 
     /* Content */
@@ -146,8 +148,8 @@ app.get("/s/:token", (req, res) => {
 
     <div class="trust-bar">
       <span>🔒 SSL Secured</span>
-      <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 28" style="height:20px;vertical-align:middle" aria-label="UPI"><defs><linearGradient id="ug" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#f97316"/><stop offset="100%" style="stop-color:#16a34a"/></linearGradient></defs><rect width="80" height="28" rx="4" fill="white"/><text x="40" y="20" text-anchor="middle" font-family="Arial Black,Arial,sans-serif" font-weight="900" font-size="16" fill="url(#ug)" letter-spacing="2">UPI</text></svg></span>
-      <span>⚡ One-time Link</span>
+      <span><img src="/img/images.png" alt="UPI" style="height:22px;vertical-align:middle;object-fit:contain"></span>
+      <span><img src="/img/NPCI-Logo.png" alt="NPCI" style="height:22px;vertical-align:middle;object-fit:contain"></span>
     </div>
 
     <div class="content">
