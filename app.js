@@ -36,7 +36,7 @@ app.get("/create", async (req, res) => {
   if (!pa) return res.status(400).send("Missing ?pa= (UPI ID)");
   const token = randomBytes(4).toString("hex");
   links[token] = { pa, pn: pn || "", amount: amount || "" };
-  const base = process.env.BASE_URL || `http://localhost:3000`;
+  const base = (process.env.BASE_URL || `http://localhost:3000`).replace(/\.$/, '');
   console.log(`[+] token=${token} for ${pa}`);
   const qr = await QRCode.toBuffer(`${base}/s/${token}`);
   res.type("png").send(qr);
