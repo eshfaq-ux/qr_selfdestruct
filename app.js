@@ -53,18 +53,31 @@ app.get("/s/:token", (req, res) => {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Pay ${data.pn || data.pa}</title>
   <style>
-    body{font-family:sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;margin:0;background:#f5f5f5}
-    .btn{background:#1a73e8;color:white;padding:16px 40px;border-radius:8px;text-decoration:none;font-size:18px;margin:10px;display:inline-block}
-    .done{background:#34a853}
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+    .card{background:white;border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,0.3);max-width:400px;width:100%;padding:40px 30px;text-align:center}
+    .merchant{color:#333;font-size:24px;font-weight:600;margin-bottom:10px}
+    .amount{color:#667eea;font-size:48px;font-weight:700;margin:20px 0}
+    .upi-id{color:#888;font-size:14px;margin-bottom:30px}
+    .pay-btn{display:block;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;text-decoration:none;padding:18px;border-radius:12px;font-size:18px;font-weight:600;margin-bottom:15px;transition:transform 0.2s,box-shadow 0.2s}
+    .pay-btn:active{transform:scale(0.98)}
+    .confirm-btn{display:none;background:#10b981;color:white;border:none;padding:14px;border-radius:12px;font-size:16px;font-weight:600;width:100%;cursor:pointer;margin-top:20px}
+    .confirm-btn.show{display:block}
+    .info{color:#999;font-size:12px;margin-top:20px;line-height:1.5}
   </style>
 </head>
 <body>
-  <h2>Pay ${data.pn || data.pa}</h2>
-  ${data.amount ? `<p style="font-size:24px">&#8377;${data.amount}</p>` : ""}
-  <a class="btn" href="${upiUrl}">Pay with GPay / PhonePe</a>
-  <br><br>
-  <a class="btn done" href="/paid/${req.params.token}">&#10003; I have paid</a>
-  <p style="color:#aaa;font-size:12px">This link expires after payment is confirmed.</p>
+  <div class="card">
+    <div class="merchant">${data.pn || 'Payment'}</div>
+    ${data.amount ? `<div class="amount">₹${data.amount}</div>` : '<div class="amount">Pay Now</div>'}
+    <div class="upi-id">${data.pa}</div>
+    <a class="pay-btn" href="${upiUrl}" onclick="showConfirm()">Pay with UPI App</a>
+    <button class="confirm-btn" id="confirmBtn" onclick="location.href='/paid/${req.params.token}'">✓ Payment Completed</button>
+    <div class="info">Click the button above to open your payment app. After completing payment, confirm below.</div>
+  </div>
+  <script>
+    function showConfirm(){setTimeout(()=>document.getElementById('confirmBtn').classList.add('show'),2000)}
+  </script>
 </body>
 </html>`);
 });
