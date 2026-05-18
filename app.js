@@ -146,7 +146,7 @@ app.get("/s/:token", (req, res) => {
 
     <div class="trust-bar">
       <span>🔒 SSL Secured</span>
-      <span>🇮🇳 NPCI / UPI</span>
+      <span><img src="https://www.npci.org.in/images/npci/upi-logo.png" alt="UPI" style="height:18px;vertical-align:middle;filter:none" onerror="this.replaceWith('🇮🇳 UPI')"></span>
       <span>⚡ One-time Link</span>
     </div>
 
