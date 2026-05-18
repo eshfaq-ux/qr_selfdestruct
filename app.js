@@ -21,19 +21,36 @@ app.get("/", (req, res) => {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>QR Self-Destruct</title>
   <style>
-    body{font-family:sans-serif;max-width:600px;margin:50px auto;padding:20px;line-height:1.6}
-    code{background:#f4f4f4;padding:2px 6px;border-radius:3px}
+    body{font-family:sans-serif;max-width:700px;margin:50px auto;padding:20px;line-height:1.6}
+    code{background:#f4f4f4;padding:2px 6px;border-radius:3px;font-size:14px}
     h1{color:#1a73e8}
+    .section{margin:30px 0;padding:20px;background:#f9f9f9;border-radius:8px}
+    .label{font-weight:600;color:#333;margin-bottom:5px}
   </style>
 </head>
 <body>
   <h1>QR Self-Destruct</h1>
-  <p>Generate self-destructing QR codes for UPI payments.</p>
-  <h3>Usage:</h3>
-  <p>Create a QR code:</p>
-  <code>/create?pa=UPI_ID&pn=NAME&amount=AMOUNT</code>
-  <h3>Example:</h3>
-  <code>/create?pa=merchant@upi&pn=Shop%20Name&amount=500</code>
+  <p>Generate QR codes for UPI payments.</p>
+  
+  <div class="section">
+    <div class="label">🔒 Direct UPI QR (No Warning, Recommended)</div>
+    <p>Opens payment app directly without browser warning:</p>
+    <code>/direct?pa=UPI_ID&pn=NAME&amount=AMOUNT</code>
+    <p style="margin-top:10px"><strong>Example:</strong><br>
+    <code>/direct?pa=6006331941@ybl&pn=Sparkzone%20Academy&amount=500</code></p>
+  </div>
+
+  <div class="section">
+    <div class="label">♻️ Permanent QR (Reusable)</div>
+    <p>Direct UPI link that never expires:</p>
+    <code>/permanent</code>
+  </div>
+
+  <div class="section">
+    <div class="label">💥 Self-Destruct QR (One-time use, shows warning)</div>
+    <p>Expires after payment confirmation:</p>
+    <code>/create?pa=UPI_ID&pn=NAME&amount=AMOUNT</code>
+  </div>
 </body>
 </html>`);
 });
@@ -50,10 +67,21 @@ app.get("/create", async (req, res) => {
   res.type("png").send(qr);
 });
 
-// Generate permanent QR
+// Generate permanent QR with direct UPI link (no warning)
 app.get("/permanent", async (req, res) => {
-  const base = (process.env.BASE_URL || `http://localhost:3000`).replace(/\.$/, '');
-  const qr = await QRCode.toBuffer(`${base}/s/${PERMANENT_TOKEN}`);
+  const pa = process.env.UPI_ID || "6006331941@ybl";
+  const pn = process.env.MERCHANT_NAME || "Sparkzone Udhampur City Sports Academy";
+  const upiUrl = `upi://pay?pa=${pa}&pn=${encodeURIComponent(pn)}&cu=INR`;
+  const qr = await QRCode.toBuffer(upiUrl);
+  res.type("png").send(qr);
+});
+
+// Generate direct UPI QR (no self-destruct, no warning)
+app.get("/direct", async (req, res) => {
+  const { pa, pn, amount } = req.query;
+  if (!pa) return res.status(400).send("Missing ?pa= (UPI ID)");
+  const upiUrl = `upi://pay?pa=${pa}&pn=${encodeURIComponent(pn || '')}&am=${amount || ''}&cu=INR`;
+  const qr = await QRCode.toBuffer(upiUrl);
   res.type("png").send(qr);
 });
 
