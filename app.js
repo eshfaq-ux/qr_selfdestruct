@@ -5,6 +5,31 @@ const { randomBytes } = require("crypto");
 const app = express();
 const links = {};
 
+// Homepage
+app.get("/", (req, res) => {
+  res.send(`<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>QR Self-Destruct</title>
+  <style>
+    body{font-family:sans-serif;max-width:600px;margin:50px auto;padding:20px;line-height:1.6}
+    code{background:#f4f4f4;padding:2px 6px;border-radius:3px}
+    h1{color:#1a73e8}
+  </style>
+</head>
+<body>
+  <h1>QR Self-Destruct</h1>
+  <p>Generate self-destructing QR codes for UPI payments.</p>
+  <h3>Usage:</h3>
+  <p>Create a QR code:</p>
+  <code>/create?pa=UPI_ID&pn=NAME&amount=AMOUNT</code>
+  <h3>Example:</h3>
+  <code>/create?pa=merchant@upi&pn=Shop%20Name&amount=500</code>
+</body>
+</html>`);
+});
+
 // Generate QR: /create?pa=UPI_ID&pn=NAME&amount=500
 app.get("/create", async (req, res) => {
   const { pa, pn, amount } = req.query;
