@@ -4,7 +4,7 @@ const { randomBytes } = require("crypto");
 const path = require("path");
 
 const app = express();
-app.use("/img", express.static(path.join(__dirname)));
+app.use(express.static(path.join(__dirname, "public")));
 const links = {};
 
 // Permanent link for main UPI ID
@@ -148,8 +148,8 @@ app.get("/s/:token", (req, res) => {
 
     <div class="trust-bar">
       <span>🔒 SSL Secured</span>
-      <span><img src="/img/images.png" alt="UPI" style="height:22px;vertical-align:middle;object-fit:contain"></span>
-      <span><img src="/img/NPCI-Logo.png" alt="NPCI" style="height:22px;vertical-align:middle;object-fit:contain"></span>
+      <span><img src="/images.png" alt="UPI" style="height:22px;vertical-align:middle;object-fit:contain"></span>
+      <span><img src="/NPCI-Logo.png" alt="NPCI" style="height:22px;vertical-align:middle;object-fit:contain"></span>
     </div>
 
     <div class="content">
