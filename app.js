@@ -1,9 +1,27 @@
 const express = require("express");
 const QRCode = require("qrcode");
 const { randomBytes } = require("crypto");
+const fs = require("fs");
+const path = require("path");
 
 const app = express();
-const links = {};
+const DATA_FILE = path.join(__dirname, "links.json");
+
+// Load links from file
+let links = {};
+if (fs.existsSync(DATA_FILE)) {
+  try {
+    links = JSON.parse(fs.readFileSync(DATA_FILE, "utf8"));
+    console.log(`[*] Loaded ${Object.keys(links).length} links from storage`);
+  } catch (e) {
+    console.log("[!] Failed to load links, starting fresh");
+  }
+}
+
+// Save links to file
+function saveLinks() {
+  fs.writeFileSync(DATA_FILE, JSON.stringify(links, null, 2));
+}
 
 // Homepage
 app.get("/", (req, res) => {
@@ -36,6 +54,7 @@ app.get("/create", async (req, res) => {
   if (!pa) return res.status(400).send("Missing ?pa= (UPI ID)");
   const token = randomBytes(4).toString("hex");
   links[token] = { pa, pn: pn || "", amount: amount || "" };
+  saveLinks();
   const base = (process.env.BASE_URL || `http://localhost:3000`).replace(/\.$/, '');
   console.log(`[+] token=${token} for ${pa}`);
   const qr = await QRCode.toBuffer(`${base}/s/${token}`);
@@ -96,6 +115,7 @@ app.get("/s/:token", (req, res) => {
 app.get("/paid/:token", (req, res) => {
   const exists = links[req.params.token];
   delete links[req.params.token];
+  saveLinks();
   if (!exists) return res.status(410).send("<h2 style='font-family:sans-serif;text-align:center;margin-top:40vh'>Already used.</h2>");
   console.log(`[!] token=${req.params.token} — self-destructed`);
   res.send("<h2 style='font-family:sans-serif;text-align:center;margin-top:40vh'>&#10003; Payment confirmed. This link has expired.</h2>");
@@ -103,3 +123,4 @@ app.get("/paid/:token", (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Running on port ${PORT}`));
+
