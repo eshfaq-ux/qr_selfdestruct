@@ -100,30 +100,40 @@ app.get("/s/:token", (req, res) => {
   <title>Pay ${merchantName}</title>
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
-    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f0f4ff;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#eef2ff;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px}
     .card{background:white;border-radius:20px;box-shadow:0 8px 32px rgba(0,0,0,.12);max-width:400px;width:100%;overflow:hidden}
-    .header{background:#1a56db;padding:24px 20px 20px;text-align:center;color:white}
-    .merchant-icon{width:56px;height:56px;background:rgba(255,255,255,.15);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:26px;border:2px solid rgba(255,255,255,.3)}
-    .merchant-name{font-size:20px;font-weight:700;letter-spacing:.2px}
-    .upi-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.15);border-radius:20px;padding:4px 10px;font-size:11px;margin-top:8px;font-weight:500}
-    .content{padding:24px 20px}
-    .amount-box{background:#f8faff;border:1.5px solid #e0e8ff;border-radius:12px;padding:16px;text-align:center;margin-bottom:20px}
-    .amount-label{color:#6b7280;font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
-    .amount{color:#111827;font-size:44px;font-weight:800}
-    .amount-sub{color:#6b7280;font-size:12px;margin-top:2px}
-    .alert-box{background:#fffbeb;border:1px solid #fcd34d;border-radius:10px;padding:12px 14px;margin-bottom:18px;display:flex;gap:10px;align-items:flex-start}
-    .alert-box .icon{font-size:16px;flex-shrink:0;margin-top:1px}
-    .alert-box p{font-size:12.5px;color:#92400e;line-height:1.5}
-    .alert-box strong{color:#78350f}
-    .pay-btn{display:flex;align-items:center;justify-content:center;gap:8px;background:#1a56db;color:white;text-decoration:none;padding:16px;border-radius:12px;font-size:17px;font-weight:700;text-align:center;box-shadow:0 4px 14px rgba(26,86,219,.35);transition:opacity .15s}
+
+    /* Header */
+    .header{background:#1a56db;padding:22px 20px 18px;text-align:center;color:white}
+    .merchant-icon{width:54px;height:54px;background:rgba(255,255,255,.15);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:26px;border:2px solid rgba(255,255,255,.35)}
+    .merchant-name{font-size:19px;font-weight:700}
+    .upi-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.18);border-radius:20px;padding:4px 11px;font-size:11px;margin-top:8px;font-weight:600;letter-spacing:.2px}
+
+    /* Trust bar */
+    .trust-bar{display:flex;justify-content:center;gap:0;background:#f0f4ff;border-bottom:1px solid #e0e8ff}
+    .trust-bar span{flex:1;text-align:center;padding:9px 4px;font-size:11px;color:#3b5bdb;font-weight:600;border-right:1px solid #e0e8ff}
+    .trust-bar span:last-child{border-right:none}
+
+    /* Content */
+    .content{padding:22px 20px}
+    .upi-id-box{display:flex;align-items:center;justify-content:center;gap:7px;background:#f8faff;border:1.5px solid #c7d7ff;border-radius:10px;padding:10px 14px;margin-bottom:18px}
+    .upi-id-box .label{font-size:11px;color:#6b7280;font-weight:500}
+    .upi-id-box .value{font-size:14px;color:#1e3a8a;font-weight:700;font-family:monospace}
+
+    /* Warning box — reframed as info */
+    .info-box{background:#f0fdf4;border:1.5px solid #86efac;border-radius:10px;padding:12px 14px;margin-bottom:18px;display:flex;gap:10px;align-items:flex-start}
+    .info-box .ico{font-size:18px;flex-shrink:0}
+    .info-box p{font-size:12.5px;color:#166534;line-height:1.55}
+    .info-box strong{color:#14532d}
+
+    /* Buttons */
+    .pay-btn{display:flex;align-items:center;justify-content:center;gap:8px;background:#1a56db;color:white;text-decoration:none;padding:16px;border-radius:12px;font-size:17px;font-weight:700;box-shadow:0 4px 14px rgba(26,86,219,.35);transition:opacity .15s}
     .pay-btn:active{opacity:.85}
     .confirm-btn{display:none;background:#059669;color:white;border:none;padding:14px;border-radius:12px;font-size:15px;font-weight:600;width:100%;cursor:pointer;margin-top:12px;box-shadow:0 4px 12px rgba(5,150,105,.25)}
     .confirm-btn.show{display:block;animation:up .3s ease}
     @keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-    .footer{margin-top:18px;text-align:center}
-    .footer p{font-size:11.5px;color:#9ca3af;line-height:1.6}
-    .trust-row{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:12px;padding-top:12px;border-top:1px solid #f3f4f6}
-    .trust-item{display:flex;align-items:center;gap:4px;font-size:11px;color:#6b7280;font-weight:500}
+
+    .footer-note{margin-top:16px;text-align:center;font-size:11px;color:#9ca3af;line-height:1.7}
   </style>
 </head>
 <body>
@@ -133,33 +143,41 @@ app.get("/s/:token", (req, res) => {
       <div class="merchant-name">${merchantName}</div>
       <div class="upi-badge">✅ Verified UPI Merchant</div>
     </div>
+
+    <div class="trust-bar">
+      <span>🔒 SSL Secured</span>
+      <span>🇮🇳 NPCI / UPI</span>
+      <span>⚡ One-time Link</span>
+    </div>
+
     <div class="content">
-      <div class="amount-box">
-        <div class="amount-label">Amount to Pay</div>
-        ${data.amount
-          ? `<div class="amount">₹${data.amount}</div><div class="amount-sub">Indian Rupees</div>`
-          : `<div class="amount" style="font-size:22px;padding:6px 0">Open app to enter amount</div>`}
+      <div class="upi-id-box">
+        <span class="label">Paying to</span>
+        <span class="value">${data.pa}</span>
       </div>
 
-      <div class="alert-box">
-        <span class="icon">💡</span>
-        <p><strong>Heads up:</strong> Your payment app may show a prompt saying you're leaving the app — <strong>this is normal and safe.</strong> Tap <em>"Continue"</em> or <em>"Allow"</em> to proceed with the payment.</p>
+      ${data.amount ? `
+      <div style="text-align:center;margin-bottom:18px">
+        <div style="font-size:11px;color:#6b7280;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Amount</div>
+        <div style="font-size:46px;font-weight:800;color:#111827">₹${data.amount}</div>
+        <div style="font-size:12px;color:#9ca3af;margin-top:2px">Indian Rupees</div>
+      </div>` : ''}
+
+      <div class="info-box">
+        <span class="ico">ℹ️</span>
+        <p><strong>Your payment app may show a "leaving app" prompt</strong> — this is a standard security step by your app, not an error. Simply tap <strong>"Continue"</strong> or <strong>"Allow"</strong> to complete the payment.</p>
       </div>
 
       <a class="pay-btn" href="${upiUrl}" onclick="showConfirm()">
-        <span>💳</span> Open Payment App
+        💳 &nbsp;Pay Now with UPI
       </a>
       <button class="confirm-btn" id="confirmBtn" onclick="location.href='/paid/${token}'">
-        ✓ I've Completed the Payment
+        ✓ &nbsp;Payment Done — Confirm
       </button>
 
-      <div class="footer">
-        <p>Paying to <strong>${data.pa}</strong></p>
-        <div class="trust-row">
-          <span class="trust-item">🔒 Secure</span>
-          <span class="trust-item">🇮🇳 UPI / NPCI</span>
-          <span class="trust-item">⚡ One-time link</span>
-        </div>
+      <div class="footer-note">
+        This is a secure, one-time payment link.<br>
+        It will expire once payment is confirmed.
       </div>
     </div>
   </div>
